@@ -1,4 +1,4 @@
-project(arduino_blink)
+project(vest_firmware)
 cmake_minimum_required(VERSION 2.8)
 
 set(HW_VARIANT eightanaloginputs)
