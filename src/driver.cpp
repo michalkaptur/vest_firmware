@@ -1,65 +1,39 @@
+#include "driver.h"
 #include <Arduino.h>
 
-#define LED1 3
-#define LED2 6
-#define LED3 9
+namespace driver {
 
-const char output_map[3] = { LED1, LED2, LED3 };
-
-volatile static short on_time(300);
-volatile static short off_time(30);
-volatile static byte out_level(130);
-const byte out_config_step(30);
-const int on_time_step(70);
-
-void config(byte _byte);
-void add_to_sequence(char out_nr);
-void run_sequence();
-void turn_output_on(byte out_nr, int time);
-void flash(int time);
-
-char buffer[10];
-byte buffer_counter;
-
-void setup(){
-    Serial.begin(9600);
-    Serial.println("hi");
-    pinMode(LED1, OUTPUT);
-    pinMode(LED2, OUTPUT);
-    pinMode(LED3, OUTPUT);
-    buffer_counter = 0;
-}
-
-
-void loop()
+void print_time()
 {
-    for(;;){
-        if (Serial.available())
-        {
-            byte rx = Serial.read();
-            if (rx >= '0' and rx <='2')
-                add_to_sequence(rx);
-            else if (rx == '#')
-                run_sequence();
-            else
-                config(rx);
-        }
-    }
+    Serial.print("time: ");
+    Serial.print(on_time, DEC);
+    Serial.println(" ms");
 }
 
-void config(byte _byte)
+void print_intensity()
+{
+    Serial.print("intensity:");
+    Serial.println(out_level*100/255, DEC);
+}
+
+void config(uint8_t _byte)
 {
     switch (_byte) {
     case '+':
         out_level = (out_level+out_config_step <= 255) ? out_level+out_config_step : 255;
+        print_intensity();
         break;
     case '-':
         out_level = (out_config_step < out_level) ? out_level-out_config_step : 0;
+        print_intensity();
+        break;
     case '>':
         on_time += on_time_step;
+        print_time();
         break;
     case '<':
         on_time = (on_time_step < on_time) ? on_time-on_time_step : 0;
+        print_time();
         break;
     default:
         break;
@@ -69,7 +43,7 @@ void config(byte _byte)
 
 void add_to_sequence(char out_nr)
 {
-    buffer[buffer_counter] = out_nr-'0';
+    buffer[buffer_counter] = out_nr-'1';
     buffer_counter++;
 }
 
@@ -93,8 +67,14 @@ void flash(int time){
     analogWrite(LED1, out_level);
     analogWrite(LED2, out_level);
     analogWrite(LED3, out_level);
+    analogWrite(LED4, out_level);
+    analogWrite(LED5, out_level);
     delay(time);
     analogWrite(LED1, 0);
     analogWrite(LED2, 0);
     analogWrite(LED3, 0);
+    analogWrite(LED4, 0);
+    analogWrite(LED5, 0);
 }
+
+} //namespace driver
