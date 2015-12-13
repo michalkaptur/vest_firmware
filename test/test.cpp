@@ -8,5 +8,5 @@ TEST(test1, t1)
 
 TEST(test2, t2)
 {
-	turn_output_on(1,50);
+    driver::turn_output_on(1,50);
 }

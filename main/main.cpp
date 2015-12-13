@@ -9,8 +9,7 @@ void setup(){
     pinMode(LED3, OUTPUT);
     pinMode(LED4, OUTPUT);
     pinMode(LED5, OUTPUT);
-    //driver::buffer_counter = 0;
-    buffer_counter = 0;
+    driver::buffer_counter = 0;
 }
 
 void loop()
@@ -20,14 +19,11 @@ void loop()
         {
             byte rx = Serial.read();
             if (rx >= '1' and rx <='5')
-                //driver::add_to_sequence(rx);
-                add_to_sequence(rx);
+                driver::add_to_sequence(rx);
             else if (rx == '#')
-		run_sequence();
-                //driver::run_sequence();
+                driver::run_sequence();
             else
-                //driver::config(rx);
-                config(rx);
+                driver::config(rx);
         }
     }
 }

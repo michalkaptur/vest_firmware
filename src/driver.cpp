@@ -1,6 +1,6 @@
 #include "driver.h"
 
-//namespace driver {
+namespace driver {
 
 void print_time()
 {
@@ -76,5 +76,5 @@ void flash(int time){
     analogWrite(LED5, 0);
 }
 
-//} //namespace driver
+} //namespace driver
 
