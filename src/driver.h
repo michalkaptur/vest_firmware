@@ -1,7 +1,7 @@
 #ifndef DRIVER_H
 #define DRIVER_H
 
-#include <stdint.h>
+#include <Arduino.h>
 
 #define LED1 3
 #define LED2 6
@@ -9,7 +9,7 @@
 #define LED4 5
 #define LED5 10
 
-namespace driver {
+// namespace driver {
 
 const char output_map[5] = { LED1, LED2, LED3, LED4, LED5 };
 
@@ -28,5 +28,6 @@ void flash(int time);
 static char buffer[20];
 static uint8_t buffer_counter;
 
-}//namespace driver
+//}//namespace driver
+
 #endif // DRIVER_H

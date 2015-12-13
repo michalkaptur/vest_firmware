@@ -1,19 +1,18 @@
 #include "driver.h"
-#include <Arduino.h>
 
-namespace driver {
+//namespace driver {
 
 void print_time()
 {
-    Serial.print("time: ");
-    Serial.print(on_time, DEC);
-    Serial.println(" ms");
+    //Serial.print("time: ");
+    //Serial.print(on_time, DEC);
+    //Serial.println(" ms");
 }
 
 void print_intensity()
 {
-    Serial.print("intensity:");
-    Serial.println(out_level*100/255, DEC);
+    //Serial.print("intensity:");
+    //Serial.println(out_level*100/255, DEC);
 }
 
 void config(uint8_t _byte)
@@ -48,7 +47,7 @@ void add_to_sequence(char out_nr)
 }
 
 void run_sequence(){
-    for (byte i = 0 ; i < buffer_counter; ++i)
+    for (uint8_t i = 0 ; i < buffer_counter; ++i)
     {
         turn_output_on(output_map[buffer[i]], on_time);
         delay(off_time);
@@ -56,7 +55,7 @@ void run_sequence(){
     buffer_counter = 0;
 }
 
-void turn_output_on(byte out_nr, int time)
+void turn_output_on(uint8_t out_nr, int time)
 {
     analogWrite(out_nr, out_level);
     delay(time);
@@ -77,4 +76,5 @@ void flash(int time){
     analogWrite(LED5, 0);
 }
 
-} //namespace driver
+//} //namespace driver
+
