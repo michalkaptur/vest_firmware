@@ -5,7 +5,7 @@ set(HW_VARIANT eightanaloginputs)
 set(FREQUENCY 16000000L)
 set(AVR_VERSION atmega328p)
 
-if (${CMAKE_BUILD_TYPE} STREQUAL "target")
+if (${BLD} STREQUAL "target")
 	message("building target binary")
 	add_definitions("-Os")
 	
@@ -29,7 +29,7 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "target")
 
 	add_executable(${PROJECT_NAME} ${SRC_LIST})
 
-elseif (${CMAKE_BUILD_TYPE} STREQUAL "test")
+elseif (${BLD} STREQUAL "test")
 	message("building test binary")
 	enable_testing()
 	# Download and unpack googletest at configure time
