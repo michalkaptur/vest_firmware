@@ -25,4 +25,33 @@ TEST(receiver_test, transmission_start)
     EXPECT_STREQ("/b",r.get_buffer());
 }
 
+TEST(receiver_test, transmission_end_ok)
+{
+    receiver r;
+    ASSERT_TRUE(r.put_byte(TRS_BEGIN));
+    ASSERT_TRUE(r.put_byte('a'));
+    ASSERT_TRUE(r.put_byte('b'));
+    ASSERT_TRUE(r.put_byte(TRS_END));
+    EXPECT_TRUE(r.was_trs_valid());
+}
+
+TEST(receiver_test, transmission_end_nok)
+{
+    receiver r;
+    ASSERT_TRUE(r.put_byte(TRS_BEGIN));
+    ASSERT_TRUE(r.put_byte('a'));
+    ASSERT_TRUE(r.put_byte('b'));
+    EXPECT_FALSE(r.was_trs_valid());
+}
+
+TEST(receiver_test, buffer_overflow)
+{
+    receiver r;
+    ASSERT_TRUE(r.put_byte(TRS_BEGIN));
+    for (int i=0; i<127; ++i) {
+        ASSERT_TRUE(r.put_byte('a'));
+    }
+    ASSERT_FALSE(r.put_byte('a'));
+}
+
 
