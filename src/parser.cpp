@@ -1,9 +1,15 @@
 #include "parser.h"
 
-#include <cstring>
+extern "C"
+{
+
+#include <string.h>
+#include <stdlib.h>
+}
 
 parser::parser()
 {
+    msg.data = NULL;
 }
 
 uint8_t parser::parse(char *str)
@@ -24,6 +30,10 @@ uint8_t parser::parse(char *str)
         return RESULT_ERR_INVALID_MSG_TYPE;
     }
     msg.type = str[0];
+    msg.checksum = chksum;
+    msg.data = (char *) malloc(sizeof(char)* len-3);
+    strncpy(msg.data, str+2, len-5);
+    msg.data[len-5]='\0';
     return RESULT_OK;
 }
 
@@ -53,4 +63,9 @@ bool parser::valid_msg_type(char msg_type)
                               MSG_TYPE_STATUS};
     char * found_ptr = strchr(valid_msg_types, msg_type);
     return found_ptr != NULL;
+}
+
+parser::~parser()
+{
+    free(msg.data);
 }

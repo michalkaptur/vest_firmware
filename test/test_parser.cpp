@@ -30,7 +30,24 @@ TEST(parser_test, message_types)
     ASSERT_EQ(RESULT_ERR_INVALID_MSG_TYPE, p.parse(invalid_msg_str));
 }
 
+TEST(parser_test, message_checksum)
+{
+    parser p;
+    char * str = "S#OK#37\0";
+    ASSERT_EQ(RESULT_OK, p.parse(str));
+    EXPECT_EQ(37,p.msg.checksum);
+}
 
+TEST(parser_test, message_data)
+{
+    parser p;
+    char * str = "S#OK#37\0";
+    ASSERT_EQ(RESULT_OK, p.parse(str));
+    EXPECT_STREQ("OK",p.msg.data);
+    char * str2 = "D#23.12.45.1#60\0";
+    EXPECT_EQ(RESULT_OK, p.parse(str2));
+    EXPECT_STREQ("23.12.45.1",p.msg.data);
+}
 
 TEST(parser_test, min_content)
 {
