@@ -1,4 +1,6 @@
 #include "receiver.h"
+#include "parser.h"
+
 extern "C"
 {
 #include <string.h>
@@ -34,6 +36,8 @@ void receiver::finish_transmission()
     trs_valid = true;
     trs_ongoing = false;
     //process buffer
+    parser p;
+    p.parse(buffer);
 }
 
 bool receiver::put_byte(const char _byte)

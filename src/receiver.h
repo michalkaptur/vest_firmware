@@ -3,6 +3,19 @@
 
 #include <Arduino.h>
 
+/*  Packet structure
+ *  /type#data#checksum\
+ *  types:
+ *      D - data
+ *      C - config
+ *      S - status
+ *  eg.:
+ *  /D#23.12.45.34.2.0.0.0.2#23\ (output sequence)
+ *  /C#90.30.10#92\ (intensity.on_time.pause_time)
+ *  /S#OK#12\
+ *  /S#ERR.8#37\    (error code)
+ * */
+
 #define TRS_BEGIN '/'
 #define TRS_END   '\\'
 
