@@ -3,15 +3,17 @@
 
 #include <Arduino.h>
 
-#define MIN_MSG_LENGTH 6 //eg. C##00\n
+#include "message.h"
 
 class parser
 {
 public:
     parser();
-    bool parse(char* str);
+    uint8_t parse(char* str);
     bool verify_checksum(char* str, unsigned int strlen, uint8_t chksum);
     uint8_t digit_to_num(char c);
+    bool valid_msg_type(char msg_type);
+    message msg;
 };
 
 #endif // PARSER_H

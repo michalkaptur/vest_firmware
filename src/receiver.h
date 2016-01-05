@@ -14,10 +14,25 @@
  *  /C#90.30.10#92\ (intensity.on_time.pause_time)
  *  /S#OK#12\
  *  /S#ERR.8#37\    (error code)
+ *
+ *
+ * Error codes:
+ * 1 - malformed packet
+ * 2 - invalid msg type (D/S/C)
+ * 3 - invalid checksum
+ *
  * */
 
 #define TRS_BEGIN '/'
 #define TRS_END   '\\'
+#define MSG_TYPE_DATA 'D'
+#define MSG_TYPE_CONFIG 'C'
+#define MSG_TYPE_STATUS 'S'
+#define MIN_MSG_LENGTH 6 //eg. C##00\n
+#define RESULT_OK 0
+#define RESULT_ERR_MALFORMED_PACKET 1
+#define RESULT_ERR_INVALID_MSG_TYPE 2
+#define RESULT_ERR_INVALID_CHECKSUM 3
 
 class receiver
 {

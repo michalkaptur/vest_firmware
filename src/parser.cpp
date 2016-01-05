@@ -1,10 +1,12 @@
 #include "parser.h"
 
+#include <cstring>
+
 parser::parser()
 {
 }
 
-bool parser::parse(char *str)
+uint8_t parser::parse(char *str)
 {
     unsigned int len(0);
     while (str[len] != '\0')
@@ -15,7 +17,14 @@ bool parser::parse(char *str)
         return false;
     }
     uint8_t chksum = digit_to_num(str[len-1]) + digit_to_num(str[len-2])*10;
-    return verify_checksum(str, len-3, chksum);
+    if (! verify_checksum(str, len-3, chksum)) {
+        return RESULT_ERR_INVALID_CHECKSUM;
+    }
+    if (! valid_msg_type(str[0])) {
+        return RESULT_ERR_INVALID_MSG_TYPE;
+    }
+    msg.type = str[0];
+    return RESULT_OK;
 }
 
 bool parser::verify_checksum(char *str, unsigned int strlen, uint8_t chksum)
@@ -35,4 +44,13 @@ bool parser::verify_checksum(char *str, unsigned int strlen, uint8_t chksum)
 uint8_t parser::digit_to_num(char c)
 {
     return c-'0';
+}
+
+bool parser::valid_msg_type(char msg_type)
+{
+    char valid_msg_types[] = {MSG_TYPE_DATA,
+                              MSG_TYPE_CONFIG,
+                              MSG_TYPE_STATUS};
+    char * found_ptr = strchr(valid_msg_types, msg_type);
+    return found_ptr != NULL;
 }
