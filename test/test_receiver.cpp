@@ -6,11 +6,11 @@ TEST(receiver_test, add_byte)
     receiver r;
     EXPECT_STREQ(NULL, r.get_buffer());
     r.put_byte(TRS_BEGIN);
-    EXPECT_STREQ("/", r.get_buffer());
+    EXPECT_STREQ("[", r.get_buffer());
     r.put_byte('b');
     r.put_byte('c');
     r.put_byte('d');
-    EXPECT_STREQ("/bcd",r.get_buffer());
+    EXPECT_STREQ("[bcd",r.get_buffer());
 }
 
 TEST(receiver_test, transmission_start)
@@ -22,7 +22,7 @@ TEST(receiver_test, transmission_start)
     ASSERT_TRUE(r.put_byte('a'));
     ASSERT_TRUE(r.put_byte(TRS_BEGIN));
     ASSERT_TRUE(r.put_byte('b'));
-    EXPECT_STREQ("/b",r.get_buffer());
+    EXPECT_STREQ("[b",r.get_buffer());
 }
 
 TEST(receiver_test, transmission_end_ok)

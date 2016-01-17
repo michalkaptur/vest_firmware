@@ -3,17 +3,20 @@
 
 #include <Arduino.h>
 
+\
+//TODO: extract it to interface
+
 /*  Packet structure
- *  /type#data#checksum\
+ *  [type#data#checksum]
  *  types:
  *      D - data
  *      C - config
  *      S - status
  *  eg.:
- *  /D#23.12.45.34.2.0.0.0.2#23\ (output sequence)
- *  /C#90.30.10#92\ (intensity.on_time.pause_time)
- *  /S#OK#12\
- *  /S#ERR.8#37\    (error code)
+ *  [D#23.12.45.34.2.0.0.0.2#23] (output sequence)
+ *  [C#90.30.10#92] (intensity.on_time.pause_time)
+ *  [S#OK#12]
+ *  [S#ERR.8#37]    (error code)
  *
  *
  * Error codes:
@@ -23,12 +26,12 @@
  *
  * */
 
-#define TRS_BEGIN '/'
-#define TRS_END   '\\'
+#define TRS_BEGIN '['
+#define TRS_END   ']'
 #define MSG_TYPE_DATA 'D'
 #define MSG_TYPE_CONFIG 'C'
 #define MSG_TYPE_STATUS 'S'
-#define MIN_MSG_LENGTH 6 //eg. C##00\n
+#define MIN_MSG_LENGTH 7 //eg. [C##00]\n
 #define RESULT_OK 0
 #define RESULT_ERR_MALFORMED_PACKET 1
 #define RESULT_ERR_INVALID_MSG_TYPE 2

@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "util.h"
 
 extern "C"
 {
@@ -19,36 +20,25 @@ uint8_t parser::parse(char *str)
     {
         len++;
     }
-    if (len < MIN_MSG_LENGTH-1) {
-        return false;
+    if (len <= MIN_MSG_LENGTH-1) {
+        return RESULT_ERR_MALFORMED_PACKET;
     }
-    uint8_t chksum = digit_to_num(str[len-1]) + digit_to_num(str[len-2])*10;
-    if (! verify_checksum(str, len-3, chksum)) {
+    uint8_t chksum = digit_to_num(str[len-2]) + digit_to_num(str[len-3])*10;
+    if (util::calc_checksum(str, len-3) != chksum) {
         return RESULT_ERR_INVALID_CHECKSUM;
     }
-    if (! valid_msg_type(str[0])) {
+    if (! valid_msg_type(str[1])) {
         return RESULT_ERR_INVALID_MSG_TYPE;
     }
-    msg.type = str[0];
+    msg.type = str[1];
     msg.checksum = chksum;
-    msg.data = (char *) malloc(sizeof(char)* len-3);
-    strncpy(msg.data, str+2, len-5);
-    msg.data[len-5]='\0';
-    return RESULT_OK;
-}
-
-bool parser::verify_checksum(char *str, unsigned int strlen, uint8_t chksum)
-{
-    unsigned int position(0);
-    unsigned int sum(0);
-    while (position != strlen)
-    {
-        if (str[position] != '#') {
-            sum+=str[position];
-        }
-        position++;
+    if (msg.data != NULL) {
+        free(msg.data);
     }
-    return sum%100 == chksum;
+    msg.data = (char *) malloc(sizeof(char)* len-4);
+    strncpy(msg.data, str+3, len-7);
+    msg.data[len-7]='\0';
+    return RESULT_OK;
 }
 
 uint8_t parser::digit_to_num(char c)
@@ -60,12 +50,15 @@ bool parser::valid_msg_type(char msg_type)
 {
     char valid_msg_types[] = {MSG_TYPE_DATA,
                               MSG_TYPE_CONFIG,
-                              MSG_TYPE_STATUS};
+                              MSG_TYPE_STATUS,
+                             '\0'};
     char * found_ptr = strchr(valid_msg_types, msg_type);
     return found_ptr != NULL;
 }
 
 parser::~parser()
 {
-    free(msg.data);
+    if (msg.data != NULL) {
+        free(msg.data);
+    }
 }

@@ -1,5 +1,6 @@
 #include "receiver.h"
 #include "parser.h"
+#include "respond.h"
 
 extern "C"
 {
@@ -9,7 +10,7 @@ extern "C"
 
 receiver::receiver():buffer_ptr(0), trs_ongoing(false), trs_valid(false)
 {
-    buffer = (char *) malloc(sizeof(char)* max_buffer_size);
+    buffer = (char *) malloc(max_buffer_size);
 }
 
 bool receiver::append_buffer(const char _byte)
@@ -37,7 +38,8 @@ void receiver::finish_transmission()
     trs_ongoing = false;
     //process buffer
     parser p;
-    p.parse(buffer);
+    uint8_t result(p.parse(buffer));
+    respond r(result);
 }
 
 bool receiver::put_byte(const char _byte)
