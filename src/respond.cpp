@@ -4,7 +4,7 @@
 
 respond::respond(int error_code)
 {
-    //TODO: checksums, extract from parser
+    //TODO: checksums
     char c[13];
     if (error_code > 0) {
         sprintf(c, "/S#ERR.%d#00\\", error_code);
