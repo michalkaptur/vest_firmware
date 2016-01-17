@@ -13,4 +13,12 @@ inline void delay(int time)
 {
 	std::cout<<time<<" delay called"<<std::endl;
 }
+
+class Serial_ {
+public:
+    static void println(char * str);
+};
+
+static Serial_ Serial;
+
 #endif //GPIO_H

@@ -48,13 +48,14 @@ elseif (${BLD} STREQUAL "test")
 	
 	# Now simply link against gtest, gtest_main, gmock or gmock_main
 	# as needed. Eg
-	include_directories("${gtest_SOURCE_DIR}/include")
-	include_directories(test/stubs)
+        include_directories("${gtest_SOURCE_DIR}/include")
+        include_directories(test/stubs)
         include_directories(src)
 
-	aux_source_directory("test/stubs" TEST_SRC_LIST)
+        aux_source_directory("test/stubs" TEST_SRC_LIST)
 	aux_source_directory(test TEST_SRC_LIST)
 	aux_source_directory(src TEST_SRC_LIST)
+        set(TEST_SRC_LIST ${TEST_SRC_LIST} test/stubs/Arduino.h)
 	add_executable(test_bin ${TEST_SRC_LIST})
 	target_link_libraries(test_bin gtest_main gtest)
 	add_test(NAME example_test COMMAND test_bin)
