@@ -42,6 +42,13 @@ void receiver::finish_transmission()
     respond r(result);
 }
 
+void receiver::invalidate_transmission()
+{
+    trs_valid = false;
+    trs_ongoing = false;
+    respond r(RESULT_ERR_MSG_TOO_SHORT);
+}
+
 bool receiver::put_byte(const char _byte)
 {
     if (_byte == TRS_BEGIN) {
@@ -50,10 +57,15 @@ bool receiver::put_byte(const char _byte)
     }
 
     if (trs_ongoing) {
+        bool result = append_buffer(_byte);
         if (_byte == TRS_END and buffer_ptr < max_buffer_size) {
-            finish_transmission();
+            if (buffer_ptr < MIN_MSG_LENGTH) {
+                invalidate_transmission();
+            } else {
+                finish_transmission();
+            }
         }
-        return append_buffer(_byte);
+        return result;
     }
     return false;
 }

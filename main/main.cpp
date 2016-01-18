@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <driver.h>
+#include <receiver.h>
 
 void setup(){
     Serial.begin(9600);
@@ -14,16 +15,11 @@ void setup(){
 
 void loop()
 {
+    receiver r;
     for(;;){
         if (Serial.available())
         {
-            byte rx = Serial.read();
-            if (rx >= '1' and rx <='5')
-                driver::add_to_sequence(rx);
-            else if (rx == '#')
-                driver::run_sequence();
-            else
-                driver::config(rx);
+            r.put_byte(Serial.read());
         }
     }
 }

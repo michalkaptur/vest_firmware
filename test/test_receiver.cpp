@@ -29,8 +29,11 @@ TEST(receiver_test, transmission_end_ok)
 {
     receiver r;
     ASSERT_TRUE(r.put_byte(TRS_BEGIN));
-    ASSERT_TRUE(r.put_byte('a'));
-    ASSERT_TRUE(r.put_byte('b'));
+    ASSERT_TRUE(r.put_byte('C'));
+    ASSERT_TRUE(r.put_byte('#'));
+    ASSERT_TRUE(r.put_byte('#'));
+    ASSERT_TRUE(r.put_byte('0'));
+    ASSERT_TRUE(r.put_byte('0'));
     ASSERT_TRUE(r.put_byte(TRS_END));
     EXPECT_TRUE(r.was_trs_valid());
 }

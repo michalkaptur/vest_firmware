@@ -16,11 +16,12 @@ parser::parser()
 uint8_t parser::parse(char *str)
 {
     unsigned int len(0);
-    while (str[len] != '\0')
-    {
+    do {
         len++;
     }
-    if (len <= MIN_MSG_LENGTH-1) {
+    while (str[len] != TRS_END);
+    len++;
+    if (len < MIN_MSG_LENGTH) {
         return RESULT_ERR_MALFORMED_PACKET;
     }
     uint8_t chksum = digit_to_num(str[len-2]) + digit_to_num(str[len-3])*10;
@@ -36,7 +37,7 @@ uint8_t parser::parse(char *str)
         free(msg.data);
     }
     msg.data = (char *) malloc(sizeof(char)* len-4);
-    strncpy(msg.data, str+3, len-7);
+    strncpy(msg.data, str+3, len-6);
     msg.data[len-7]='\0';
     return RESULT_OK;
 }
