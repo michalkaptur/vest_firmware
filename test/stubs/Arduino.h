@@ -17,6 +17,9 @@ inline void delay(int time)
 class Serial_ {
 public:
     static void println(char * str);
+    static void println(bool str);
+    static void print(char * str);
+    static void flush();
 };
 
 static Serial_ Serial;
