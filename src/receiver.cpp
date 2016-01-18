@@ -18,7 +18,6 @@ bool receiver::append_buffer(const char _byte)
     if (buffer_ptr < max_buffer_size) {
         buffer[buffer_ptr]=_byte;
         buffer_ptr++;
-        buffer[buffer_ptr]='\0';
         return true;
     }
     return false;
@@ -36,17 +35,22 @@ void receiver::finish_transmission()
 {
     trs_valid = true;
     trs_ongoing = false;
-    //process buffer
     parser p;
     uint8_t result(p.parse(buffer));
-    respond r(result);
+//    respond r(result);
+//    r.send();
+    Serial.println(result);
+    Serial.flush();
 }
 
 void receiver::invalidate_transmission()
 {
     trs_valid = false;
     trs_ongoing = false;
-    respond r(RESULT_ERR_MSG_TOO_SHORT);
+    Serial.println(RESULT_ERR_MSG_TOO_SHORT);
+    Serial.flush();
+//    respond r(RESULT_ERR_MSG_TOO_SHORT);
+//    r.send();
 }
 
 bool receiver::put_byte(const char _byte)
