@@ -47,6 +47,14 @@ TEST(receiver_test, transmission_end_nok)
     EXPECT_FALSE(r.was_trs_valid());
 }
 
+TEST(receiver_test, transmission_end_msg_too_short)
+{
+    receiver r;
+    ASSERT_TRUE(r.put_byte(TRS_BEGIN));
+    ASSERT_TRUE(r.put_byte(TRS_END));
+    EXPECT_FALSE(r.was_trs_valid());
+}
+
 TEST(receiver_test, buffer_overflow)
 {
     receiver r;
