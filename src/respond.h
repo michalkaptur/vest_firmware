@@ -5,6 +5,8 @@ class respond
 {
 public:
     respond(int error_code);
+    void send();
+    char msg[15];
 private:
     respond();
 };
