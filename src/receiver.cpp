@@ -10,7 +10,7 @@ extern "C"
 
 receiver::receiver():buffer_ptr(0), trs_ongoing(false), trs_valid(false)
 {
-    buffer = (char *) malloc(max_buffer_size);
+    buffer = (char *) calloc(max_buffer_size, sizeof(char));
 }
 
 bool receiver::append_buffer(const char _byte)
