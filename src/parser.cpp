@@ -37,9 +37,9 @@ uint8_t parser::parse(char *str)
     if (msg.data != NULL) {
         free(msg.data);
     }
-    msg.data_size = sizeof(char)*(len-4);
-    msg.data = (char *) calloc(len-4, sizeof(char));
-    strncpy(msg.data, str+3, len-7);
+    msg.data_size = len-7;
+    msg.data = (char *) calloc(msg.data_size, sizeof(char));
+    strncpy(msg.data, str+3, msg.data_size);
     return RESULT_OK;
 }
 
