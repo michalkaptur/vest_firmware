@@ -10,6 +10,7 @@ TEST(player_test, play_ok)
     msg.data_size = msg_data.size();
     msg.type = MSG_TYPE_DATA;
     player p(msg);
+    std::cout<<"order:"<<msg_data<<std::endl;
     ASSERT_TRUE(p.go());
 }
 

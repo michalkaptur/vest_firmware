@@ -1,6 +1,7 @@
 #include "receiver.h"
 #include "parser.h"
 #include "respond.h"
+#include "player.h"
 
 extern "C"
 {
@@ -35,12 +36,21 @@ void receiver::finish_transmission()
 {
     trs_valid = true;
     trs_ongoing = false;
-    parser p;
-    uint8_t result(p.parse(buffer));
+    parser _parser;
+    uint8_t result(_parser.parse(buffer));
 //    respond r(result);
 //    r.send();
     Serial.println(result);
     Serial.flush();
+    switch(_parser.msg.type) {
+        case MSG_TYPE_DATA: {
+            player _player(_parser.msg);
+            _player.go();
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 void receiver::invalidate_transmission()
