@@ -19,3 +19,8 @@ uint8_t util::calc_checksum(const char *str, unsigned int strlen)
     }
     return sum%100;
 }
+
+uint8_t util::digit_to_num(char c)
+{
+    return c-'0';
+}

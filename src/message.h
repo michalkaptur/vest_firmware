@@ -9,6 +9,7 @@ struct message
 {
     char type;
     char* data;
+    uint8_t data_size;
     uint8_t checksum;
 };
 

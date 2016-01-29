@@ -24,7 +24,8 @@ uint8_t parser::parse(char *str)
     if (len < MIN_MSG_LENGTH) {
         return RESULT_ERR_MALFORMED_PACKET;
     }
-    uint8_t chksum = digit_to_num(str[len-2]) + digit_to_num(str[len-3])*10;
+    uint8_t chksum = util::digit_to_num(str[len-2])
+            + util::digit_to_num(str[len-3])*10;
     if (util::calc_checksum(str, len-3) != chksum) {
         return RESULT_ERR_INVALID_CHECKSUM;
     }
@@ -36,14 +37,10 @@ uint8_t parser::parse(char *str)
     if (msg.data != NULL) {
         free(msg.data);
     }
+    msg.data_size = sizeof(char)*(len-4);
     msg.data = (char *) calloc(len-4, sizeof(char));
     strncpy(msg.data, str+3, len-7);
     return RESULT_OK;
-}
-
-uint8_t parser::digit_to_num(char c)
-{
-    return c-'0';
 }
 
 bool parser::valid_msg_type(char msg_type)
