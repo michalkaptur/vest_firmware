@@ -20,17 +20,22 @@ if (${BLD} STREQUAL "target")
 
 	include_directories(/usr/share/arduino/hardware/arduino/cores/arduino)
 	include_directories(/usr/share/arduino/hardware/arduino/variants/${HW_VARIANT})
+        include_directories(/usr/share/arduino/libraries/Wire)
+        include_directories(/usr/share/arduino/libraries/Wire/utility)
 	include_directories(/usr/lib/avr/include/)
 	include_directories(src)
 
 	aux_source_directory(main SRC_LIST)
 	aux_source_directory(src SRC_LIST)
 	aux_source_directory(/usr/share/arduino/hardware/arduino/cores/arduino SRC_LIST)
+        aux_source_directory(/usr/share/arduino/libraries/Wire SRC_LIST)
+        aux_source_directory(/usr/share/arduino/libraries/Wire/utility SRC_LIST)
+
 
 	add_executable(${PROJECT_NAME} ${SRC_LIST})
 
 elseif (${BLD} STREQUAL "test")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wno-write-strings")
 	message("building test binary")
 	enable_testing()
 	# Download and unpack googletest at configure time
@@ -57,6 +62,7 @@ elseif (${BLD} STREQUAL "test")
 	aux_source_directory(test TEST_SRC_LIST)
 	aux_source_directory(src TEST_SRC_LIST)
         set(TEST_SRC_LIST ${TEST_SRC_LIST} test/stubs/Arduino.h)
+        set(TEST_SRC_LIST ${TEST_SRC_LIST} test/stubs/Wire.h)
 	add_executable(test_bin ${TEST_SRC_LIST})
 	target_link_libraries(test_bin gtest_main gtest)
 	add_test(NAME example_test COMMAND test_bin)
