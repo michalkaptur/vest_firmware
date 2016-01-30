@@ -2,6 +2,7 @@
 #include "parser.h"
 #include "respond.h"
 #include "player.h"
+#include "config.h"
 
 extern "C"
 {
@@ -48,6 +49,11 @@ void receiver::finish_transmission()
         case MSG_TYPE_DATA: {
             player _player(_parser.msg);
             _player.go();
+            break;
+        }
+        case MSG_TYPE_CONFIG: {
+            //TODO: parse msg.data to separate values
+            //config::instance().update(duration,pause,intensity);
             break;
         }
         default:
