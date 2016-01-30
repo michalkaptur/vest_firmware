@@ -42,6 +42,8 @@ void receiver::finish_transmission()
 //    r.send();
     Serial.println(result);
     Serial.flush();
+    if (result != RESULT_OK) return;
+
     switch(_parser.msg.type) {
         case MSG_TYPE_DATA: {
             player _player(_parser.msg);
