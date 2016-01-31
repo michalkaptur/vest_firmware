@@ -29,6 +29,7 @@
 
 #define TRS_BEGIN '['
 #define TRS_END   ']'
+#define MSG_SEPARATOR_DATA '.'
 #define MSG_TYPE_DATA 'D'
 #define MSG_TYPE_CONFIG 'C'
 #define MSG_TYPE_STATUS 'S'
