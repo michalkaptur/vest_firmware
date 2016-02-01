@@ -26,11 +26,11 @@ TEST(util_test, numbers_parser_ok)
     ASSERT_TRUE(util::parse_numbers(str.c_str(), s));
     ASSERT_EQ(0, s.size);
 
-    str = "12.345.6";
+    str = "12.34.6";
     ASSERT_TRUE(util::parse_numbers(str.c_str(), s));
     ASSERT_EQ(3, s.size);
     ASSERT_TRUE(s.numbers);
     ASSERT_EQ(12, s.numbers[0]);
-    ASSERT_EQ(345, s.numbers[1]);
+    ASSERT_EQ(34, s.numbers[1]);
     ASSERT_EQ(6, s.numbers[2]);
 }

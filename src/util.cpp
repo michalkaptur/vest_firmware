@@ -47,19 +47,20 @@ bool util::parse_numbers(const char *string, numbers_seq &seq)
     }
     seq.size = counter;
     if (seq.numbers != NULL) free(seq.numbers);
-    seq.numbers = (int*)calloc(seq.size, sizeof(int));
-
+    seq.numbers = (uint8_t*)calloc(seq.size, sizeof(uint8_t));
+    Serial.println(seq.size);
     char* prev_dot_ptr = (char*)string;
     dot_ptr = strchr((char*)string, MSG_SEPARATOR_DATA);
-    int number;
+    uint8_t number;
     counter = 0;
     while (dot_ptr != NULL) {
         number = 0;
         for(; prev_dot_ptr != dot_ptr; ++prev_dot_ptr)
         {
-            number += digit_to_num(*prev_dot_ptr)*pow(10,dot_ptr-prev_dot_ptr-1);
+            int8_t tmp = digit_to_num(*prev_dot_ptr);
+            if (tmp<0) return false;
+            number += tmp*(uint8_t)pow(10,dot_ptr-prev_dot_ptr-1);
         }
-        //number += digit_to_num(*dot_ptr-1);
         seq.numbers[counter]=number;
         counter++;
         prev_dot_ptr = ++dot_ptr;
@@ -69,14 +70,15 @@ bool util::parse_numbers(const char *string, numbers_seq &seq)
     char* eof((char*)string);
     while (*eof) ++eof;
     if (eof != string) {
-        while(*prev_dot_ptr != '\0')
+        while(prev_dot_ptr != eof)
         {
-            number += digit_to_num(*prev_dot_ptr)*pow(10,eof-prev_dot_ptr-1);
+            int8_t tmp = digit_to_num(*prev_dot_ptr);
+            if (tmp<0) return false;
+            number += (uint8_t)tmp*pow(10,eof-prev_dot_ptr-1);
             ++prev_dot_ptr;
         }
         seq.numbers[counter]=number;
     }
-
     return true;
 }
 

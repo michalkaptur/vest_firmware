@@ -8,6 +8,8 @@ player::player(message msg):_msg(msg){}
 
 void player::blink(uint8_t out_nr)
 {
+    Serial.println(out_nr,DEC);
+    Serial.flush();
     Adafruit_PWMServoDriver pwm1 = Adafruit_PWMServoDriver(0x40);
     pwm1.begin();
     pwm1.setPWMFreq(1600);
@@ -19,14 +21,16 @@ void player::blink(uint8_t out_nr)
 
 bool player::go()
 {
-   if (_msg.type == MSG_TYPE_DATA) {
-       for(uint8_t i = 0; i<_msg.data_size; ++i) {
-           //TODO: parse msg.data to separate values
-           blink(util::digit_to_num(_msg.data[i]));
+    numbers_seq seq;
+    if (_msg.type == MSG_TYPE_DATA and util::parse_numbers(_msg.data, seq)) {
+        Serial.println("nadupcam");
+        Serial.flush();
+       for(uint8_t i = 0; i<seq.size; ++i) {
+           blink(seq.numbers[i]);
        }
        return true;
-   }
-   return false;
+    }
+    return false;
 }
 
 

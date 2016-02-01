@@ -6,8 +6,8 @@ struct numbers_seq
 {
     numbers_seq();
     ~numbers_seq();
-    int* numbers;
-    int size;
+    uint8_t* numbers; //TODO: change these to uint16_t to fit config data as well
+    uint8_t size;
 };
 
 class util

@@ -4,9 +4,10 @@
 TEST(module_test, receiver_ok)
 {
     receiver r;
-    std::string msg("[D#123321#68]");
+    std::string msg("[D#12.33.21#60]");
     for(std::string::const_iterator it = msg.begin(); it != msg.end(); ++it) {
         r.put_byte(*it);
     }
-    std::cout<<"order:123321"<<std::endl;
+    ASSERT_TRUE(r.was_trs_valid());
+    std::cout<<"order:12.33.21"<<std::endl;
 }

@@ -3,6 +3,7 @@
 #include "respond.h"
 #include "player.h"
 #include "config.h"
+#include "util.h"
 
 extern "C"
 {
@@ -47,13 +48,23 @@ void receiver::finish_transmission()
 
     switch(_parser.msg.type) {
         case MSG_TYPE_DATA: {
+            Serial.println(MSG_TYPE_DATA);
+            Serial.flush();
             player _player(_parser.msg);
             _player.go();
             break;
         }
         case MSG_TYPE_CONFIG: {
-            //TODO: parse msg.data to separate values
-            //config::instance().update(duration,pause,intensity);
+            Serial.println(MSG_TYPE_CONFIG);
+            Serial.flush();
+            numbers_seq seq;
+            if (util::parse_numbers(_parser.msg.data, seq) and seq.size == 3)
+            {
+                config::instance().update(
+                            seq.numbers[0],
+                            seq.numbers[1],
+                            seq.numbers[2]);
+            }
             break;
         }
         default:

@@ -5,7 +5,7 @@
 TEST(player_test, play_ok)
 {
     message msg;
-    const std::string msg_data("123");
+    const std::string msg_data("1.2.34");
     msg.data = (char*)msg_data.c_str();
     msg.data_size = msg_data.size();
     msg.type = MSG_TYPE_DATA;
