@@ -10,10 +10,10 @@ TEST(test_config, init)
 
 TEST(test_config, update)
 {
+    int intensity = 3;
     int duration = 1;
     int pause = 2;
-    int intensity = 3;
-    config::instance().update(duration, pause, intensity);
+    config::instance().update(intensity, duration, pause);
     ASSERT_EQ(duration, config::instance().duration());
     ASSERT_EQ(pause, config::instance().pause());
     ASSERT_EQ(intensity, config::instance().intensity());

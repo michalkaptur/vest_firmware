@@ -11,7 +11,7 @@ public:
 private:
     message _msg;
     player();
-    void blink(uint8_t out_nr);
+    void blink(uint16_t out_nr);
 };
 
 #endif // PLAYER_H

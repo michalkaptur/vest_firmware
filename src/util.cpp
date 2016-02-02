@@ -47,11 +47,10 @@ bool util::parse_numbers(const char *string, numbers_seq &seq)
     }
     seq.size = counter;
     if (seq.numbers != NULL) free(seq.numbers);
-    seq.numbers = (uint8_t*)calloc(seq.size, sizeof(uint8_t));
-    Serial.println(seq.size);
+    seq.numbers = (uint16_t*)calloc(seq.size, sizeof(uint16_t));
     char* prev_dot_ptr = (char*)string;
     dot_ptr = strchr((char*)string, MSG_SEPARATOR_DATA);
-    uint8_t number;
+    uint16_t number;
     counter = 0;
     while (dot_ptr != NULL) {
         number = 0;
@@ -59,7 +58,7 @@ bool util::parse_numbers(const char *string, numbers_seq &seq)
         {
             int8_t tmp = digit_to_num(*prev_dot_ptr);
             if (tmp<0) return false;
-            number += tmp*(uint8_t)pow(10,dot_ptr-prev_dot_ptr-1);
+            number += tmp*(uint16_t)pow(10,dot_ptr-prev_dot_ptr-1);
         }
         seq.numbers[counter]=number;
         counter++;

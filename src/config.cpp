@@ -12,12 +12,12 @@ const uint32_t config::pause() {return _pause;}
 
 const uint32_t config::intensity() {return _intensity;}
 
-void config::update(uint32_t duration, uint32_t pause, uint32_t intensity)
+void config::update(uint32_t intensity, uint32_t duration, uint32_t pause)
 {
+    _intensity=intensity;
     _duration=duration;
     _pause=pause;
-    _intensity=intensity;
 }
 
-config::config():_duration(200),_pause(5),_intensity(2000){}
+config::config():_intensity(2000),_duration(200),_pause(5){}
 

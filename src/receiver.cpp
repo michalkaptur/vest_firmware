@@ -42,21 +42,17 @@ void receiver::finish_transmission()
     uint8_t result(_parser.parse(buffer));
 //    respond r(result);
 //    r.send();
-    Serial.println(result);
+    Serial.println(result); //TODO send proper response
     Serial.flush();
     if (result != RESULT_OK) return;
 
     switch(_parser.msg.type) {
         case MSG_TYPE_DATA: {
-            Serial.println(MSG_TYPE_DATA);
-            Serial.flush();
             player _player(_parser.msg);
             _player.go();
             break;
         }
         case MSG_TYPE_CONFIG: {
-            Serial.println(MSG_TYPE_CONFIG);
-            Serial.flush();
             numbers_seq seq;
             if (util::parse_numbers(_parser.msg.data, seq) and seq.size == 3)
             {
