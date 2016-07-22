@@ -5,10 +5,18 @@ set(HW_VARIANT eightanaloginputs)
 set(FREQUENCY 16000000L)
 set(AVR_VERSION atmega328p)
 
+aux_source_directory(src SRC_LIST)
+include_directories(src)
+
+if (NOT DEFINED ${BLD})
+	message("BLD type not set, using default")
+	set(BLD "test")
+endif()
+
 if (${BLD} STREQUAL "target")
 	message("building target binary")
 	add_definitions("-Os")
-	
+
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DF_CPU=${FREQUENCY}")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DF_CPU=${FREQUENCY}")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmcu=${AVR_VERSION}")
@@ -20,50 +28,40 @@ if (${BLD} STREQUAL "target")
 
 	include_directories(/usr/share/arduino/hardware/arduino/cores/arduino)
 	include_directories(/usr/share/arduino/hardware/arduino/variants/${HW_VARIANT})
-        include_directories(/usr/share/arduino/libraries/Wire)
-        include_directories(/usr/share/arduino/libraries/Wire/utility)
+	include_directories(/usr/share/arduino/libraries/Wire)
+	include_directories(/usr/share/arduino/libraries/Wire/utility)
 	include_directories(/usr/lib/avr/include/)
-	include_directories(src)
 
 	aux_source_directory(main SRC_LIST)
-	aux_source_directory(src SRC_LIST)
 	aux_source_directory(/usr/share/arduino/hardware/arduino/cores/arduino SRC_LIST)
-        aux_source_directory(/usr/share/arduino/libraries/Wire SRC_LIST)
-        aux_source_directory(/usr/share/arduino/libraries/Wire/utility SRC_LIST)
+	aux_source_directory(/usr/share/arduino/libraries/Wire SRC_LIST)
+	aux_source_directory(/usr/share/arduino/libraries/Wire/utility SRC_LIST)
 
 
 	add_executable(${PROJECT_NAME} ${SRC_LIST})
 
 elseif (${BLD} STREQUAL "test")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wno-write-strings")
 	message("building test binary")
-	enable_testing()
-	# Download and unpack googletest at configure time
+
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wno-write-strings")
+
 	configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
 	execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
 	  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
 	execute_process(COMMAND ${CMAKE_COMMAND} --build .
 	  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
-	
-	# Add googletest directly to our build. This adds
-	# the following targets: gtest, gtest_main, gmock
-	# and gmock_main
-	add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
-	                 ${CMAKE_BINARY_DIR}/googletest-build
-	                 EXCLUDE_FROM_ALL )
-	
-	# Now simply link against gtest, gtest_main, gmock or gmock_main
-	# as needed. Eg
-        include_directories("${gtest_SOURCE_DIR}/include")
-        include_directories(test/stubs)
-        include_directories(src)
+	add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src ${CMAKE_BINARY_DIR}/googletest-build)
+	include_directories("${gtest_SOURCE_DIR}/include")
 
-        aux_source_directory("test/stubs" TEST_SRC_LIST)
+	include_directories(test/stubs)
+
+	aux_source_directory("test/stubs" TEST_SRC_LIST)
 	aux_source_directory(test TEST_SRC_LIST)
-	aux_source_directory(src TEST_SRC_LIST)
-        set(TEST_SRC_LIST ${TEST_SRC_LIST} test/stubs/Arduino.h)
-        set(TEST_SRC_LIST ${TEST_SRC_LIST} test/stubs/Wire.h)
-	add_executable(test_bin ${TEST_SRC_LIST})
+	set(TEST_SRC_LIST ${TEST_SRC_LIST} test/stubs/Arduino.h)
+	set(TEST_SRC_LIST ${TEST_SRC_LIST} test/stubs/Wire.h)
+	add_executable(test_bin ${TEST_SRC_LIST} ${SRC_LIST})
 	target_link_libraries(test_bin gtest_main gtest)
+
+	enable_testing()
 	add_test(NAME example_test COMMAND test_bin)
 endif()
